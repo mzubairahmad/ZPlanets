@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// iOS 14 onward
 @available(iOS 14.0, *)
 @main
 struct ZPlanetsApp: App {
@@ -20,6 +21,7 @@ struct ZPlanetsApp: App {
     }
 }
 
+// iOS 13 specific support
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

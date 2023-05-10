@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct PlanetListView: View {
+    // PlanetViewModel observeable Object
     @ObservedObject var viewModel: PlanetViewModel
     
     var body: some View {
-        List(viewModel.planets, id: \.name) { planet in
+        // List of planets
+        List(viewModel.planets) { planet in
+            // cell of list
             VStack(alignment: .leading) {
                 Text(planet.name)
                     .font(.headline)
@@ -19,11 +22,14 @@ struct PlanetListView: View {
             }
         }
         .onAppear {
+            // start fetching data
             viewModel.fetchPlanets()
         }
         .overlay(offlineOverlay)
     }
     
+    // this will show only if we are in Offline mode
+    // Currently it is showing in centre of the screen
     private var offlineOverlay: some View {
         Group {
             if viewModel.isOffline {

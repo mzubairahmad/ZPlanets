@@ -11,6 +11,7 @@ import CoreData
 class CoreDataManager {
     static let shared = CoreDataManager()
     
+    // persistentContainer will initaated once accessed
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ZPlanets")
         container.loadPersistentStores(completionHandler: { _, error in
@@ -21,10 +22,12 @@ class CoreDataManager {
         return container
     }()
     
+    // CoreData Context
     var mainContext: NSManagedObjectContext {
         persistentContainer.viewContext
     }
     
+    // common save method
     func saveContext() {
         let context = mainContext
         if context.hasChanges {
@@ -37,6 +40,7 @@ class CoreDataManager {
         }
     }
     
+    // fetching Planets data from CoreData
     func fetchPlanets() -> [PlanetEntity] {
         let fetchRequest: NSFetchRequest<PlanetEntity> = PlanetEntity.fetchRequest()
         do {
@@ -48,6 +52,7 @@ class CoreDataManager {
         }
     }
     
+    // Saving into CoreData
     func savePlanets(_ planets: [Planet]) {
         mainContext.perform { [weak self] in
             do {
@@ -55,6 +60,7 @@ class CoreDataManager {
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
                 try self?.mainContext.execute(deleteRequest)
                 
+                // iterating in planet array and saving
                 for planet in planets {
                     let planetEntity = PlanetEntity(context: self?.mainContext ?? NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType))
                     planetEntity.name = planet.name
@@ -70,6 +76,7 @@ class CoreDataManager {
         }
     }
     
+    // delete data of planets
     func deleteAllPlanets() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = PlanetEntity.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)

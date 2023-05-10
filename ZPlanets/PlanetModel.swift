@@ -23,5 +23,6 @@ struct Planet: Codable, Identifiable {
 }
 
 struct PlanetResults: Codable {
+    // array of planets
     let results: [Planet]
 }

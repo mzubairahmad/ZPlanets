@@ -15,6 +15,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
+            // using PlanetsListView to show the list of planets
             PlanetListView(viewModel: viewModel)
                 .navigationBarTitle("Planets")
         }

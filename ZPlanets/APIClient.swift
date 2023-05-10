@@ -20,10 +20,12 @@ enum APIError: Error {
 class APIClient {
     private let session: URLSession
     
+    // init with shaared instance of URLSession
     init(session: URLSession = .shared) {
         self.session = session
     }
     
+    // Using combine to get data
     func fetchPlanets() -> AnyPublisher<[Planet], APIError>  {
         guard let url = URL(string: "https://swapi.dev/api/planets/") else {
             return Fail(error: APIError.invalidURL).eraseToAnyPublisher()
