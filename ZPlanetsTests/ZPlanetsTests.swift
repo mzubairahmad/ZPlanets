@@ -10,6 +10,85 @@ import XCTest
 
 final class ZPlanetsTests: XCTestCase {
 
+    var viewModel: PlanetViewModel!
+        
+        override func setUp() {
+            super.setUp()
+            viewModel = PlanetViewModel(apiClient: APIClient(session: URLSession.shared), dataManager: CoreDataManager.shared)
+        }
+        
+        override func tearDown() {
+            super.tearDown()
+            viewModel = nil
+        }
+    
+    func testFetchPlanetsSuccess() {
+            // given
+        let mockPlanets = [Planet(name: "Tatooine", population: "200000", terrain: "desert", climate: "arid"), Planet(name: "Alderaan", population: "2000000000", terrain: "grasslands, mountains", climate: "temperate")]
+            let mockData = try! JSONEncoder().encode(mockPlanets)
+            let url = URL(string: "https://swapi.dev/api/planets/")!
+            let urlResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            let session = URLSessionMock(data: mockData, response: urlResponse, error: nil)
+            let apiClient = APIClient(session: session)
+            viewModel = PlanetViewModel(apiClient: apiClient, dataManager: CoreDataManager.shared)
+            let expectation = self.expectation(description: "fetchPlanets should succeed")
+            
+            // when
+            viewModel.fetchPlanets()
+            
+            // then
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                XCTAssertEqual(self.viewModel.planets.count, 2)
+                XCTAssertEqual(self.viewModel.planets[0].name, "Tatooine")
+                XCTAssertEqual(self.viewModel.planets[0].terrain, "desert")
+                XCTAssertFalse(self.viewModel.isOffline)
+                expectation.fulfill()
+            }
+            
+            waitForExpectations(timeout: 1.0, handler: nil)
+        }
+    
+    
+    func testFetchPlanetsFailure() {
+             //given
+            let session = URLSessionMock(data: nil, response: nil, error: APIError.invalidURL)
+            let apiClient = APIClient(session: session)
+            viewModel = PlanetViewModel(apiClient: apiClient, dataManager: CoreDataManager.shared)
+            let expectation = self.expectation(description: "fetchPlanets should fail")
+
+            // when
+            viewModel.fetchPlanets()
+
+            // then
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                XCTAssertTrue(self.viewModel.planets.isEmpty)
+                XCTAssertTrue(self.viewModel.isOffline)
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1.0, handler: nil)
+        }
+    
+    func testFetchPlanetsOffline() {
+            // given
+            let session = URLSessionMock(data: nil, response: nil, error: nil)
+            let apiClient = APIClient(session: session)
+            viewModel = PlanetViewModel(apiClient: apiClient, dataManager: CoreDataManager.shared)
+            let expectation = self.expectation(description: "fetchPlanets should be offline")
+
+            // when
+            viewModel.fetchPlanets()
+
+            // then
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                XCTAssertTrue(self.viewModel.planets.isEmpty)
+                XCTAssertTrue(self.viewModel.isOffline)
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1.0, handler: nil)
+        }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

@@ -29,6 +29,7 @@
 		0578C7B02A0C28DD002F0203 /* PlanetManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578C7A32A0C28DD002F0203 /* PlanetManagedObject.swift */; };
 		0578C7B12A0C28DD002F0203 /* PlanetListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578C7A42A0C28DD002F0203 /* PlanetListView.swift */; };
 		0578C7B22A0C28DD002F0203 /* PlanetListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578C7A42A0C28DD002F0203 /* PlanetListView.swift */; };
+		0578C7B72A0C571A002F0203 /* ZPlanets.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0578C77A2A0C27FA002F0203 /* ZPlanets.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -306,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0578C7A62A0C28DD002F0203 /* PlanetViewModel.swift in Sources */,
+				0578C7B72A0C571A002F0203 /* ZPlanets.xcdatamodeld in Sources */,
 				0578C7862A0C27FA002F0203 /* ZPlanetsTests.swift in Sources */,
 				0578C7B22A0C28DD002F0203 /* PlanetListView.swift in Sources */,
 				0578C7AA2A0C28DD002F0203 /* CoreDataManager.swift in Sources */,
